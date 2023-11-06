@@ -1,0 +1,154 @@
+# def get_id(data, string):
+# 	if len(data[string]) == 0:
+# 		return 1
+# 	else:
+# 		return max(item['id'] for item in data[string]) + 1
+
+def get_id_category(data):
+	if len(data['category']) == 0:
+		return 1
+	else:
+		return max(item['id'] for item in data['category']) + 1
+
+@app.post('/category')
+async def add_category(category_name: str):
+	item_found = False
+	for category_item in data['category']:
+		if category_item['name'] == category_name:
+			item_found = True
+			return "Category "+ category_name +" exists."
+	
+	if not item_found:
+		category_id = get_id_category(data)
+		item_dict = {'id_category': category_id, 'name': category_name}
+		data['category'].append(item_dict)
+		with open(json_filename,"w") as write_file:
+			json.dump(data, write_file, indent=4)
+
+		return item_dict
+	
+	raise HTTPException(
+		status_code=404, detail=f'item not found'
+	)
+
+@app.put('/product')
+async def update_product(item: product):
+	item_dict = item.dict()
+	item_found = False
+	for product_idx, product_item in enumerate(data['product']):
+		if product_item['id'] == item_dict['id']:
+			item_found = True
+			data['product'][product_idx]=item_dict
+			
+			with open(json_filename,"w") as write_file:
+				json.dump(data, write_file, indent=4)
+			return "updated"
+	
+	if not item_found:
+		return "product ID not found."
+	raise HTTPException(
+		status_code=404, detail=f'item not found'
+	)
+
+@app.delete('/product/{product_id}')
+async def delete_product(product_id: int):
+
+	item_found = False
+	for product_idx, product_item in enumerate(data['product']):
+		if product_item['id'] == product_id:
+			item_found = True
+			data['product'].pop(product_idx)
+			
+			with open(json_filename,"w") as write_file:
+				json.dump(data, write_file, indent=4)
+			return "updated"
+	
+	if not item_found:
+		return "product ID not found."
+	raise HTTPException(
+		status_code=404, detail=f'item not found'
+	)
+
+
+-------------------------------------------------------
+@app.get('/detail_transaction/{name_product}')
+async def read_fav_merk(name_product: str):
+	merks = {}
+	for detail in data['detail_transaction']:
+		product_id = detail['id_product']
+		transaction_quantity = detail['quantity']
+
+		if data['product'][product_id-1]['name_product'] == name_product:
+			merk = data['product'][product_id-1]['merk']
+			merks[merk] += transaction_quantity
+	
+	if merks:
+		max_merk = max(merks, key=merks.get)
+		quantity = merks[max_merk]
+		print(f"For product '{name_product}', the most purchased merk is '{max_merk}' with a total quantity of {quantity}.")
+	else:
+		print(f"No purchases found for product '{name_product}'.")
+
+-----------------------------------------------------------------------------------
+# class category(BaseModel):
+# 	id: int
+# 	name: str
+
+# class product(BaseModel):
+# 	id: int
+# 	name_product: str
+# 	price: int
+# 	id_category: int
+# 	merk: str
+# 	stock: int
+# 	id_aisle: int
+
+# class aisle(BaseModel):
+# 	id: int
+# 	name: str
+
+# class transaction(BaseModel):
+# 	id: int
+# 	date: str
+# 	total_price:int
+
+# class detail_transaction(BaseModel):
+# 	id: int
+# 	id_transaction: int
+# 	id_product: int
+# 	quantity: int
+
+# json_filename="smartcart.json"
+
+# with open(json_filename,"r") as read_file:
+# 	data = json.load(read_file)
+
+	# @app.get('/product')
+	# async def read_all_product():
+	# 	return data['product']
+
+	# @app.get('/category')
+	# async def read_all_category():
+	# 	return data['category']
+
+	# @app.get('/aisle')
+	# async def read_all_aisle():
+	# 	return data['aisle']
+
+	# @app.get('/transaction')
+	# async def read_all_transaction():
+	# 	return data['transaction']
+
+	# @app.get('/detail_transaction/{id_transaction}')
+	# async def read_transaction(id_transaction: int):
+	# 	order_detail = []
+	# 	for detail_item in data['detail_transaction']:
+	# 		if detail_item['id_transaction'] == id_transaction:
+	# 			order_detail.append(detail_item)
+			
+	# 	if not order_detail:
+	# 		raise HTTPException(status_code=404, detail="No detail found")
+		
+	# 	return order_detail
+
+

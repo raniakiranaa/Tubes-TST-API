@@ -1,0 +1,148 @@
+{
+    "product": [
+        {
+            "id": 1,
+            "name_product": "Pensil",
+            "price": 1500,
+            "id_category": 1,
+            "merk": "Faber-Castell",
+            "stock": 100,
+            "id_aisle": 1
+        },
+        {
+            "id": 2,
+            "name_product": "Pensil",
+            "price": 2000,
+            "id_category": 1,
+            "merk": "Kenko",
+            "stock": 75,
+            "id_aisle": 1
+        },
+        {
+            "id": 3,
+            "name_product": "Pensil Warna",
+            "price": 3000,
+            "id_category": 1,
+            "merk": "Crayola",
+            "stock": 50,
+            "id_aisle": 1
+        },
+        {
+            "id": 4,
+            "name_product": "Penghapus",
+            "price": 1000,
+            "id_category": 1,
+            "merk": "Pentel",
+            "stock": 80,
+            "id_aisle": 1
+        },
+        {
+            "id": 5,
+            "name_product": "Printer",
+            "price": 150000,
+            "id_category": 2,
+            "merk": "Canon",
+            "stock": 15,
+            "id_aisle": 2
+        }
+    ],
+    "category": [
+        {
+            "id": 1,
+            "name": "Alat Tulis"
+        },
+        {
+            "id": 2,
+            "name": "Bahan Kantor"
+        }
+    ],
+    "aisle": [
+        {
+            "id": 1,
+            "name": "Lorong A"
+        },
+        {
+            "id": 2,
+            "name": "Lorong B"
+        }
+    ],
+    "transaction": [
+        {
+            "id": 1,
+            "date": "2023-11-01",
+            "total_price": 15.0
+        },
+        {
+            "id": 2,
+            "date": "2023-11-02",
+            "total_price": 20.5
+        },
+        {
+            "id": 3,
+            "date": "2023-11-03",
+            "total_price": 8.0
+        }
+    ],
+    "detail_transaction": [
+        {
+            "id": 1,
+            "id_transaction": 1,
+            "id_product": 1,
+            "quantity": 5
+        },
+        {
+            "id": 2,
+            "id_transaction": 1,
+            "id_product": 3,
+            "quantity": 3
+        },
+        {
+            "id": 3,
+            "id_transaction": 1,
+            "id_product": 5,
+            "quantity": 2
+        },
+        {
+            "id": 4,
+            "id_transaction": 2,
+            "id_product": 2,
+            "quantity": 4
+        },
+        {
+            "id": 5,
+            "id_transaction": 2,
+            "id_product": 4,
+            "quantity": 5
+        },
+        {
+            "id": 6,
+            "id_transaction": 2,
+            "id_product": 1,
+            "quantity": 3
+        },
+        {
+            "id": 7,
+            "id_transaction": 3,
+            "id_product": 5,
+            "quantity": 4
+        },
+        {
+            "id": 8,
+            "id_transaction": 3,
+            "id_product": 3,
+            "quantity": 1
+        },
+        {
+            "id": 9,
+            "id_transaction": 3,
+            "id_product": 2,
+            "quantity": 2
+        },
+        {
+            "id": 10,
+            "id_transaction": 3,
+            "id_product": 4,
+            "quantity": 3
+        }
+    ]
+}
