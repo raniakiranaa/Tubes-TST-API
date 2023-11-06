@@ -13,7 +13,6 @@ config = {
 	'ssl_ca': './ssl/DigiCertGlobalRootCA.crt (2).pem'
 }
 
-
 try:
 	conn = mysql.connector.connect(**config)
 	print("Connection established")
@@ -60,38 +59,61 @@ else:
 		else:
 			raise HTTPException(status_code=404, detail=f"No information found for product: {name_product}")
 
-	@app.get('/aisle')
-	async def read_all_aisle():
+	@app.get('/aisle/{name}')
+	async def get_products_by_aisle(name: str):
 		cursor = conn.cursor()
-		query = ("SELECT * FROM aisle")
+		query = f"SELECT id FROM aisle WHERE name = '{name}'"
 		cursor.execute(query)
-		result = cursor.fetchall()
-		cursor.close()
-		return result
+		aisle_id = cursor.fetchone()
+		if aisle_id:
+			aisle_id = aisle_id[0]
+			query = f"SELECT DISTINCT name_product FROM product WHERE id_aisle = {aisle_id}"
+			cursor.execute(query)
+			products = cursor.fetchall()
+			cursor.close
+			return f"Products in aisle {name}: {[product[0] for product in products]}"
+		else:
+			cursor.close()
+			raise HTTPException(status_code=404, detail=f"No information found for aisle {name}")
 
-	@app.get('/category')
-	async def read_all_category():
+	@app.get('/category/{name}')
+	async def get_products_by_category(name: str):
 		cursor = conn.cursor()
-		query = ("SELECT * FROM category")
+		query = f"SELECT id FROM category WHERE name = '{name}'"
 		cursor.execute(query)
-		result = cursor.fetchall()
-		cursor.close()
-		return result
-	
+		category_id = cursor.fetchone()
+		if category_id:
+			category_id = category_id[0]
+			query = f"SELECT DISTINCT name_product FROM product WHERE id_category = {category_id}"
+			cursor.execute(query)
+			products = cursor.fetchall()
+			cursor.close
+			return f"Products in category {name}: {[product[0] for product in products]}"
+		else:
+			cursor.close()
+			raise HTTPException(status_code=404, detail=f"No information found for category {name}")
+
 	@app.get('/detail_transaction/')
-	async def read_fav_merk(name_product: Optional[str] = Query(None)):
+	async def get_information_transaction(name_product: Optional[str] = Query(None)):
 		cursor = conn.cursor()
 		if name_product:
-			query = f"SELECT name_product, merk, SUM(quantity) as total FROM detail_transaction JOIN product ON detail_transaction.id_product = product.id WHERE name_product = '{name_product}' GROUP BY name_product, merk ORDER BY total DESC"
+			query = f"SELECT * FROM product WHERE name_product = '{name_product}'"
 			cursor.execute(query)
 			result = cursor.fetchall()
-			cursor.close()
-
 			if result:
-				fav_merk = result[0][1]
-				return f"The most bought merk for product {name_product} is {fav_merk}"
+				query = f"SELECT name_product, merk, SUM(quantity) as total FROM detail_transaction JOIN product ON detail_transaction.id_product = product.id WHERE name_product = '{name_product}' GROUP BY name_product, merk ORDER BY total DESC"
+				cursor.execute(query)
+				result = cursor.fetchall()
+				cursor.close()
+
+				if result:
+					fav_merk = result[0][1]
+					return f"The most bought merk for product {name_product} is {fav_merk}"
+				else:
+					raise HTTPException(status_code=404, detail=f"No transaction found for product: {name_product}")
 			else:
-				raise HTTPException(status_code=404, detail=f"No transaction found for product: {name_product}")
+				cursor.close()
+				raise HTTPException(status_code=404, detail=f"No product found with name = {name_product}")
 		else:
 			query = ("SELECT * FROM detail_transaction")
 			cursor.execute(query)
