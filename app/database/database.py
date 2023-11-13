@@ -2,10 +2,10 @@ import mysql.connector
 from mysql.connector import errorcode
 
 config = {
-	'host':'cartdb.mysql.database.azure.com',
-	'user':'sasi',
-	'password':'rania#15',
-	'database':'cartdb',
+	'host':'host',
+	'user':'user',
+	'password':'password',
+	'database':'database',
 	'client_flags': [mysql.connector.ClientFlag.SSL],
 	'ssl_ca': './ssl/DigiCertGlobalRootCA.crt (2).pem'
 }
