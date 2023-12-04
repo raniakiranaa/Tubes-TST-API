@@ -5,6 +5,7 @@ class User(BaseModel):
     password: str       # user password
     name: str           # user name
     role: str           # user role
+    store_id: str       # user store
 
     class Config:
         json_schema_extra = {
@@ -12,6 +13,7 @@ class User(BaseModel):
                 "username" : "nutrisasi",
                 "password" : "rania",
                 "name" : "sasi",
-                "role" : "admin"
+                "role" : "admin",
+                "store_id" : "A"
             }
         }

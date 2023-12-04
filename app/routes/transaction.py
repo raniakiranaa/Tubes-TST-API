@@ -11,14 +11,16 @@ transaction_router = APIRouter(
 )
 
 @transaction_router.get('/detail_transaction/')
-async def get_information_transaction(name_product: Optional[str] = Query(None)):
+async def get_information_transaction(user: user_dependency, name_product: Optional[str] = Query(None)):
     if name_product:
-        query = f"SELECT * FROM product WHERE name = '{name_product}'"
-        cursor.execute(query)
+        query = "SELECT * FROM product WHERE store_id = %s AND name = %s"
+        values = (user[4], name_product)
+        cursor.execute(query, values)
         result = cursor.fetchall()
         if result:
-            query = f"SELECT name, brand, SUM(quantity) as total FROM detail_transaction JOIN product ON detail_transaction.id_product = product.id_product WHERE name = '{name_product}' GROUP BY name, brand ORDER BY total DESC"
-            cursor.execute(query)
+            query = "SELECT name, brand, SUM(quantity) as total FROM detail_transaction JOIN product ON detail_transaction.id_product = product.id_product WHERE detail_transaction.store_id = %s AND name = %s GROUP BY name, brand ORDER BY total DESC"
+            values = (user[4], name_product)
+            cursor.execute(query, values)
             result = cursor.fetchall()
 
             if result:
@@ -29,15 +31,16 @@ async def get_information_transaction(name_product: Optional[str] = Query(None))
         else:
             raise HTTPException(status_code=404, detail=f"No product found with name = {name_product}")
     else:
-        query = ("SELECT * FROM detail_transaction")
-        cursor.execute(query)
+        query = ("SELECT * FROM detail_transaction where store_id = %s")
+        cursor.execute(query, (user[4], ))
         result = cursor.fetchall()
         return result
     
 @transaction_router.get('/detail_transaction/{id_product}')
-async def product_recommendation(id_product: int):
-    query = "SELECT name FROM product WHERE id_product = %s"
-    cursor.execute(query, (id_product,))
+async def product_recommendation(user: user_dependency, id_product: int):
+    query = "SELECT name FROM product WHERE store_id = %s AND id_product = %s"
+    values = (user[4], id_product)
+    cursor.execute(query, values)
     name = cursor.fetchone()
     if name:
         query = "SELECT id_transaction, id_product FROM detail_transaction"
@@ -86,8 +89,8 @@ async def create_transaction(user: user_dependency):
     if result is None:
         raise HTTPException(status_code=404, detail=f"No product found in cart")
 
-    query = ("INSERT INTO transaction (date) VALUES (NOW())")
-    cursor.execute(query)
+    query = ("INSERT INTO transaction (store_id, date) VALUES (%s, NOW())")
+    cursor.execute(query, (user[4], ))
     conn.commit()
 
     query = "SELECT LAST_INSERT_ID()"
@@ -99,8 +102,8 @@ async def create_transaction(user: user_dependency):
     detail = detail[:-1]
     total_price = 0
     for item in detail:
-        query = ("INSERT INTO detail_transaction (id_transaction, id_product, quantity) VALUES (%s, %s, %s)")
-        values = (current_transaction, item[2], item[3])
+        query = ("INSERT INTO detail_transaction (id_transaction, store_id, id_product, quantity) VALUES (%s, %s, %s, %s)")
+        values = (current_transaction, user[4], item[2], item[3])
         cursor.execute(query, values)
         conn.commit()
 

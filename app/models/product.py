@@ -8,6 +8,7 @@ class Product(BaseModel):
     stock: int          # product stock
     category: str       # product category 
     aisle: str          # product aisle
+    store_id: str       # product store
 
     class Config:
         json_schema_extra = {
@@ -18,6 +19,7 @@ class Product(BaseModel):
                 "brand": "Faber-Castell",
                 "stock" : 10,
                 "category" : "Alat Tulis",
-                "aisle" : "Stationary"
+                "aisle" : "Stationary",
+                "store_id" : "A"
             }
         }

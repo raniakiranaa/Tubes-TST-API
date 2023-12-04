@@ -16,8 +16,9 @@ async def retrieve_all_users(user: user_dependency):
     if user[3] != 'admin':
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is unauthorized")
 
-    query = ("SELECT * FROM user")
-    cursor.execute(query)
+    # get users from admin's store
+    query = ("SELECT * FROM user WHERE store_id = %s")
+    cursor.execute(query, (user[4], ))
     result = cursor.fetchall()
     if result:
         return result
@@ -25,41 +26,39 @@ async def retrieve_all_users(user: user_dependency):
         raise HTTPException(status_code=404, detail="No user found")
 
 @user_router.post("/user", response_model=str)
-async def create_user(user: User, current_user: user_dependency):
-    # validate role
-    if current_user[3] != 'admin':
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is unauthorized")
-
+async def create_user(username: str, password: str, name: str, store_id: str):
     # validate input
-    if not user.username:
-        raise HTTPException(status_code=422, detail=f"Username is a required field. New user has not been added")
+    if not username or not password or not name:
+        raise HTTPException(status_code=422, detail=f"Username, password, and name are required fields. New user has not been added")
     
-    users = await retrieve_all_users(current_user)
+    query = ("SELECT * FROM user")
+    cursor.execute(query)
+    users = cursor.fetchall()
     for item in users:
-        if user.username == item[0]:
+        if username == item[0]:
             raise HTTPException(status_code=422, detail=f"Username is taken. Choose another username")
     
-    if len(user.username) > 25 or len(user.username) > 25 or len(user.name) > 25:
+    if len(username) > 25 or len(username) > 25 or len(name) > 25:
         raise HTTPException(status_code=422, detail="Data exceeds the length limit. Fill out a shorter data")
-    if user.role != 'admin' and user.role != 'customer':
-        raise HTTPException(status_code=422, detail=f"Role is not valid. Role can only be between admin or customer")
     
-    hashed_password = hash_password(user.password)
-    query = ("INSERT INTO user VALUES (%s, %s, %s, %s)")
-    values = (user.username, hashed_password, user.name, user.role)
+    hashed_password = hash_password(password)
+    query = ("INSERT INTO user VALUES (%s, %s, %s, %s, %s)")
+    # assign all new users as a customer
+    values = (username, hashed_password, name, 'customer', store_id)
     cursor.execute(query, values)
     conn.commit()
-    return f"User {user.username} has been added"
+    return f"User {username} has been added"
 
 @user_router.put('/user/{username}', response_model= str)
 async def update_user(user: user_dependency, username: str, password: Optional[str] = None, name: Optional[str] = None, role: Optional[str] = None):
-    # validate role
-    if user[3] != 'admin':
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is unauthorized")
-
     query = "SELECT * FROM user WHERE username = %s"
     cursor.execute(query, (username, ))
     result = cursor.fetchone()
+
+    # validate role (has to be admin from the same store)
+    if user[3] != 'admin' or user[4] != result[4]:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is unauthorized")
+    
     if result:
         query = "UPDATE user SET"
         values = []
@@ -93,13 +92,14 @@ async def update_user(user: user_dependency, username: str, password: Optional[s
 
 @user_router.delete('/user/{username}', response_model=str)
 async def delete_user(user: user_dependency, username: str):
-    # validate role
-    if user[3] != 'admin':
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is unauthorized")
-
     query = "SELECT * FROM user WHERE username = %s"
     cursor.execute(query, (username, ))
     result = cursor.fetchone()
+
+    # validate role (has to be admin from the same store)
+    if user[3] != 'admin' or user[4] != result[4]:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="User is unauthorized")
+
     if result:
         query = "DELETE FROM user WHERE username = %s"
         cursor.execute(query, (username, ))

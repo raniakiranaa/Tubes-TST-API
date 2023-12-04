@@ -2,6 +2,7 @@ from pydantic import BaseModel
 
 class Cart(BaseModel):
     id_cart: int        # an ID number
+    store_id : str      # id store
     username: str       # user using the cart
     status: str         # is available
 
@@ -9,6 +10,7 @@ class Cart(BaseModel):
         json_schema_extra = {
             "example": {
                 "id_cart" : 3,
+                "store_id" : "A",
                 "username" : "rerora",
                 "status" : "false"
             }

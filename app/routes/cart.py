@@ -38,29 +38,34 @@ async def get_info_cart(user: user_dependency):
 
 @cart_router.put('/cart')
 async def assign_cart(user: user_dependency):
-    # true if a user already have the cart, false if not
-    query = ("SELECT * FROM cart WHERE status = 'True'")
-    cursor.execute(query)
-    result =  cursor.fetchall()
-    if result:
-        query = ("UPDATE cart SET username = %s, status = 'false' WHERE id_cart = %s")
-        values = (user[0], result[0][0])
-        cursor.execute(query, values)
-        conn.commit()
-        return f"User {user[0]} is using cart with id {result[0][0]}"
+    user_cart = get_user_cart(user)
+    if user_cart is None:
+        # true if a user already have the cart, false if not
+        query = ("SELECT * FROM cart WHERE store_id = %s AND status = 'True'")
+        cursor.execute(query, (user[4], ))
+        result =  cursor.fetchall()
+        if result:
+            query = ("UPDATE cart SET username = %s, status = 'false' WHERE id_cart = %s")
+            values = (user[0], result[0][0])
+            cursor.execute(query, values)
+            conn.commit()
+            return f"User {user[0]} is using cart with id {result[0][0]}"
+        else:
+            # all cart is occupied
+            raise HTTPException(status_code=404, detail=f"No empty cart is found. Sorry :(")
     else:
-        # all cart is occupied
-        raise HTTPException(status_code=404, detail=f"No empty cart is found. Sorry :(")
+        raise HTTPException(status_code=422, detail=f"User is already assigned to cart with id {user_cart[0]}")
 
-@cart_router.post('/detail_cart')
+@cart_router.post('/detail_cart/{id_product}')
 async def add_item_to_cart(user: user_dependency, id_product: int):
     user_cart = get_user_cart(user)
     if user_cart is None:
         raise HTTPException(status_code=422, detail=f"Please assign cart to user {user[0]}")
     
     # validasi product
-    query = ("SELECT * FROM product WHERE id_product = %s")
-    cursor.execute(query, (id_product, ))
+    query = ("SELECT * FROM product WHERE store_id = %s AND id_product = %s")
+    values = (user[4], id_product)
+    cursor.execute(query, values)
     result = cursor.fetchone()
     if result:
         # add 1 item
@@ -84,7 +89,7 @@ async def add_item_to_cart(user: user_dependency, id_product: int):
     else:
         raise HTTPException(status_code=404, detail=f"No product found under id {id_product}")
     
-@cart_router.delete('/cart/{id_cart}')
+@cart_router.delete('/cart')
 async def delete_user_cart(user: user_dependency):
     user_cart = get_user_cart(user)
     # get current user
