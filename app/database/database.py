@@ -1,11 +1,12 @@
 import mysql.connector
 from mysql.connector import errorcode
+from ..utils.config import settings
 
 config = {
-	'host':'host',
-	'user':'user',
-	'password':'password',
-	'database':'database',
+	'host': settings.db_host,
+	'user':settings.db_user,
+	'password': settings.db_password,
+	'database': settings.db_name,
 	'client_flags': [mysql.connector.ClientFlag.SSL],
 	'ssl_ca': './ssl/DigiCertGlobalRootCA.crt (2).pem'
 }

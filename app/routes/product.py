@@ -1,8 +1,8 @@
 from fastapi import APIRouter, HTTPException, Query
-from ..models.product import Product
+from app.models.product import Product
 from typing import Optional
-from ..database.database import cursor, conn
-from ..services.auth import user_dependency
+from app.database.database import cursor, conn
+from app.utils.auth import user_dependency
 from starlette import status
 
 product_router = APIRouter(

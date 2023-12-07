@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException
-from ..models.user import User
+from app.models.user import User
 from typing import Optional
-from ..database.database import cursor, conn
-from ..services.auth import hash_password
-from ..services.auth import user_dependency
+from app.database.database import cursor, conn
+from app.utils.auth import hash_password
+from app.utils.auth import user_dependency
+from app.utils.godeliv.userData import *
 from starlette import status
 
 user_router = APIRouter(
