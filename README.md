@@ -10,7 +10,7 @@ Layanan smart cart adalah layanan yang terintegrasi dalam domain retail grocery.
 - Website		: https://tubes-tst-api-frontend.vercel.app
 
 ## Documentation
-See documentation [here](Docs/18221168_Rania Sasi Kirana_Tugas Besar TST.pdf)
+See documentation [here](https://drive.google.com/drive/folders/1q7P-HfgrK_ZXXPYZAbSHR0jniDzKXRPV?usp=sharing)
 
 ## Tech Stack Backend:
 - Programming language: Python
