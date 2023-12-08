@@ -19,7 +19,7 @@ const Login = () => {
         formData.append("password", password);
 
         try {
-            const response = await axios.post("http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/auth/token",
+            const response = await axios.post("https://smartcartchatbot.azurewebsites.net/auth/token",
                 formData,
             );
 

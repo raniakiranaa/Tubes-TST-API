@@ -17,7 +17,7 @@ const Register = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/user?username=${username}&password=${password}&name=${name}&store_id=${storeID}`);
+            const response = await axios.post(`https://smartcartchatbot.azurewebsites.net/user?username=${username}&password=${password}&name=${name}&store_id=${storeID}`);
 
             // route to login page
             router.push("/login");

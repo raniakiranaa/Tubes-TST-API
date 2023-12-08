@@ -16,7 +16,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       const token = sessionStorage.getItem('token');
       console.log("token: " + token);
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/product/${name_product}`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/product/${name_product}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -41,7 +41,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       const token = sessionStorage.getItem('token');
       console.log("token: " + token);
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/detail_transaction/?name_product=${productName}`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/detail_transaction/?name_product=${productName}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -65,7 +65,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       const token = sessionStorage.getItem('token');
       console.log("token: " + token);
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/detail_transaction/${productID}`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/detail_transaction/${productID}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -91,7 +91,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       console.log("token: " + token);
       console.log("username: " + username)
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/recommendations/${username}?target_kalori=${calories}`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/recommendations/${username}?target_kalori=${calories}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -118,7 +118,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       console.log("token: " + token);
       console.log("username: " + username)
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/recommendations?user_name=${username}&umur=${age}&jenis_kelamin=${gender}`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/recommendations?user_name=${username}&umur=${age}&jenis_kelamin=${gender}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -143,7 +143,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       const token = sessionStorage.getItem('token');
       console.log("token: " + token);
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/recommendations`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/recommendations`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -168,7 +168,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
       const token = sessionStorage.getItem('token');
       console.log("token: " + token);
 
-      const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/menus/${menu}`, {
+      const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/menus/${menu}`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -194,7 +194,7 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
   //     console.log("token: " + token);
   //     console.log("username: " + username)
 
-  //     const response = await axios.get(`http://smartcart3.dpabdmdug3daatbx.southeastasia.azurecontainer.io/cart`, {
+  //     const response = await axios.get(`https://smartcartchatbot.azurewebsites.net/cart`, {
   //       headers: {
   //         Authorization: `Bearer ${token}`
   //       }
