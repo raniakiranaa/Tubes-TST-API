@@ -10,10 +10,20 @@ transaction_router = APIRouter(
     tags = ["Transaction"]
 )
 
+@transaction_router.get('/transaction/{username}')
+async def get_transaction(user: user_dependency):
+    query = ("SELECT * FROM transaction WHERE username = %s")
+    cursor.execute(query, (user[0], ))
+    result = cursor.fetchall()
+    if result:
+        return result
+    else:
+        raise HTTPException(status_code=404, detail=f"No transaction found for user {user[0]}")
+
 @transaction_router.get('/detail_transaction/')
 async def get_information_transaction(user: user_dependency, name_product: Optional[str] = Query(None)):
     if name_product:
-        query = "SELECT * FROM product WHERE store_id = %s AND name = %s"
+        query = "SELECT * FROM product WHERE store_id = %s AND name LIKE CONCAT ('%', %s, '%')"
         values = (user[4], name_product)
         cursor.execute(query, values)
         result = cursor.fetchall()
@@ -25,7 +35,7 @@ async def get_information_transaction(user: user_dependency, name_product: Optio
 
             if result:
                 fav_merk = result[0][1]
-                return f"The most bought merk for product {name_product} is {fav_merk}"
+                return f"The most bought brand for product {name_product} is {fav_merk}"
             else:
                 raise HTTPException(status_code=404, detail=f"No transaction found for product: {name_product}")
         else:
@@ -83,14 +93,15 @@ async def create_transaction(user: user_dependency):
     if user_cart is None:
         raise HTTPException(status_code=422, detail=f"Please assign cart to user {user[0]}")
 
-    query = "SELECT * FROM detail_cart WHERE id_cart = %s"
-    cursor.execute(query, (user_cart[0], ))
-    result = cursor.fetchone()
-    if result is None:
-        raise HTTPException(status_code=404, detail=f"No product found in cart")
+    # query = "SELECT * FROM detail_cart WHERE id_cart = %s"
+    # cursor.execute(query, (user_cart[0], ))
+    # result = cursor.fetchone()
+    # if result is None:
+    #     raise HTTPException(status_code=404, detail=f"No product found in cart")
 
-    query = ("INSERT INTO transaction (store_id, date) VALUES (%s, NOW())")
-    cursor.execute(query, (user[4], ))
+    query = ("INSERT INTO transaction (store_id, date, username) VALUES (%s, NOW(), %s)")
+    values = (user[4], user[0])
+    cursor.execute(query, values)
     conn.commit()
 
     query = "SELECT LAST_INSERT_ID()"

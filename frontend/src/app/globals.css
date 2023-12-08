@@ -1,0 +1,282 @@
+/* @tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: 
+    #DFEFFF
+
+}
+
+body {
+  font-family: Poppins;
+}
+
+@layer utilities {
+
+  /* chatbot */
+  .react-chatbot-kit-chat-container {
+    color:red;
+  }
+
+  .max-container {
+    @apply mx-auto max-w-[1440px];
+  }
+
+  .padding-container {
+    @apply px-6 lg:px-8 3xl:px-0;
+  }
+
+  .flexCenter {
+    @apply flex items-center justify-center;
+  }
+
+  .flexBetween {
+    @apply flex items-center justify-between;
+  }
+
+  .flexStart {
+    @apply flex items-center justify-start;
+  }
+
+  .flexEnd {
+    @apply flex items-center justify-end;
+  }
+
+  /* font */
+  .regular-64 {
+    @apply text-[64px] font-[400] leading-[120%];
+  }
+
+  .regular-40 {
+    @apply text-[40px] font-[400] leading-[120%];
+  }
+
+  .regular-32 {
+    @apply text-[32px] font-[400];
+  }
+
+  .regular-24 {
+    @apply text-[24px] font-[400];
+  }
+
+  .regular-20 {
+    @apply text-[20px] font-[400];
+  }
+
+  .regular-18 {
+    @apply text-[18px] font-[400];
+  }
+
+  .regular-16 {
+    @apply text-[16px] font-[400];
+  }
+
+  .regular-14 {
+    @apply text-[14px] font-[400];
+  }
+
+  .regular-12 {
+    @apply text-[12px] font-[400];
+  }
+
+  .medium-10 {
+    @apply text-[10px] font-[500];
+  }
+
+  .medium-12 {
+    @apply text-[12px] font-[500];
+  }
+
+  .medium-14 {
+    @apply text-[14px] font-[500];
+  }
+
+  .medium-16 {
+    @apply text-[16px] font-[500];
+  }
+
+  .medium-18 {
+    @apply text-[18px] font-[500];
+  }
+
+  .semibold-12 {
+    @apply text-[12px] font-[600];
+  }
+
+  .semibold-14 {
+    @apply text-[14px] font-[600];
+  }
+
+  .semibold-16 {
+    @apply text-[16px] font-[600];
+  }
+
+  .semibold-18 {
+    @apply text-[18px] font-[600];
+  }
+
+  .semibold-24 {
+    @apply text-[24px] font-[600];
+  }
+
+  .semibold-30 {
+    @apply text-[30px] font-[600];
+  }
+
+  .bold-88 {
+    @apply text-[88px] font-[700] leading-[120%];
+  }
+
+  .bold-64 {
+    @apply text-[64px] font-[700] leading-[120%];
+  }
+
+  .bold-52 {
+    @apply text-[52px] font-[700] leading-[120%];
+  }
+
+  .bold-40 {
+    @apply text-[40px] font-[700] leading-[120%];
+  }
+
+  .bold-32 {
+    @apply text-[32px] font-[700] leading-[120%];
+  }
+
+  .bold-28 {
+    @apply text-[28px] font-[700];
+  }
+
+  .bold-24 {
+    @apply text-[24px] font-[700];
+  }
+
+  .bold-20 {
+    @apply text-[20px] font-[700];
+  }
+
+  .bold-18 {
+    @apply text-[18px] font-[700];
+  }
+
+  .bold-16 {
+    @apply text-[16px] font-[700];
+  }
+
+  .bold-14 {
+    @apply text-[14px] font-[700];
+  }
+
+  .bold-12 {
+    @apply text-[12px] font-[700];
+  }
+
+  /* button */
+  .btn_blue {
+    @apply bg-violet-500 px-4 py-2 text-white transition-all hover:bg-violet-600
+  }
+
+  .btn_red {
+    @apply bg-red-500 px-2 py-2 text-white transition-all hover:bg-red-600
+  }
+
+  .btn_green {
+    @apply bg-green-500 px-2 py-2 text-white transition-all hover:bg-green-600
+  }
+
+  .btn_blue_outline {
+    @apply px-6 py-2 text-violet-500 hover:text-violet-600 transition-all border-solid border-violet-500 hover:border-violet-600
+  }
+
+  .btn_red {
+    @apply bg-red-500 px-4 py-2 text-white transition-all hover:bg-red-600
+  }
+
+  .btn_cancel {
+    @apply bg-zinc-200 px-4 py-2 text-black transition-all hover:bg-zinc-300
+  }
+
+  .bg_dashboard {
+    @apply bg-gray-50
+  }
+
+  .bg_row_blue {
+      background-color: #F6F8FE;
+  }
+
+  .heading {
+    color: #295F9A;
+  }
+
+  .flexContainer {
+    display: flex;
+  }
+  
+  .leftContent {
+    flex: 2;
+  }
+  
+  .rightContent {
+    flex: 1;
+  }
+
+  .blurred-page {
+    filter: blur(5px);
+  }
+    
+}
+
+.animate-in {
+  animation: animateIn 0.3s ease 0.15s both;
+}
+
+@keyframes animateIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

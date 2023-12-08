@@ -26,7 +26,7 @@ async def retrieve_all_users(user: user_dependency):
     else:
         raise HTTPException(status_code=404, detail="No user found")
 
-@user_router.post("/user", response_model=str)
+@user_router.post("/user")
 async def create_user(username: str, password: str, name: str, store_id: str):
     # validate input
     if not username or not password or not name:
@@ -39,7 +39,7 @@ async def create_user(username: str, password: str, name: str, store_id: str):
         if username == item[0]:
             raise HTTPException(status_code=422, detail=f"Username is taken. Choose another username")
     
-    if len(username) > 25 or len(username) > 25 or len(name) > 25:
+    if len(username) > 25 or len(password) > 25 or len(name) > 25:
         raise HTTPException(status_code=422, detail="Data exceeds the length limit. Fill out a shorter data")
     
     hashed_password = hash_password(password)

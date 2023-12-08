@@ -10,9 +10,12 @@ product_router = APIRouter(
 )
 
 @product_router.get('/product')
+# async def retrieve_all_products():
 async def retrieve_all_products(user: user_dependency):
     query = ("SELECT * FROM product WHERE store_id = %s")
+    # query = ("SELECT * FROM product")
     cursor.execute(query, (user[4], ))
+    # cursor.execute(query)
     result = cursor.fetchall()
     if result:
         return result
@@ -21,22 +24,23 @@ async def retrieve_all_products(user: user_dependency):
 
 @product_router.get('/product/{name_product}', response_model= str)
 async def search_info_product(user: user_dependency, name_product: str):
-    query = "SELECT * FROM product WHERE store_id = %s and name = %s"
+    query = "SELECT * FROM product WHERE store_id = %s and name LIKE CONCAT ('%', %s, '%')"
     values = (user[4], name_product)
     cursor.execute(query, values)
     result = cursor.fetchall()
     if result:
         aisle_name = result[0][6]
-        response = f"{name_product} is in aisle {aisle_name}"
+        response = f"{name_product} is in aisle {aisle_name}\n"
 
         for item in result:
+            name = item[1]
             price = item[2]
             brand = item[3]
             stock = item[4]
             if stock > 0:
-                response += f" {stock} items are available with brand {brand} for Rp.{price}\n"
+                response += f"{name} are available with brand {brand} for Rp.{price}\n"
             else:
-                response += f" No stock available with brand {brand}"
+                response += f" No stock available for {name} with brand {brand}\n"
         
         return response
     else:

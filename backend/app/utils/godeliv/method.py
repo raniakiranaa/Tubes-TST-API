@@ -1,5 +1,4 @@
 import requests
-import json
 from app.utils.config import settings
 
 def get_access_token():

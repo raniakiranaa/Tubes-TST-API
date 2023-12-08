@@ -29,7 +29,7 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
     if not user:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid username or password", headers={"WWW-Authenticate": "Bearer"},)
     
-    token = create_access_token(user[0], timedelta(minutes=20))
+    token = create_access_token(user[0])
 
     return {'access_token': token, 'token_type': 'bearer'}
 
@@ -45,10 +45,10 @@ def authenticate_user(username: str, password: str):
     
     return result
 
-def create_access_token(username: str, expires_delta: timedelta):
+def create_access_token(username: str):
     encode = {'sub': username}
-    expires = datetime.utcnow() + expires_delta
-    encode.update({'exp': expires})
+    # expires = datetime.utcnow() + expires_delta
+    # encode.update({'exp': expires})
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
 

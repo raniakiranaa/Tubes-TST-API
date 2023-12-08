@@ -56,7 +56,7 @@ async def assign_cart(user: user_dependency):
     else:
         raise HTTPException(status_code=422, detail=f"User is already assigned to cart with id {user_cart[0]}")
 
-@cart_router.post('/detail_cart/{id_product}')
+@cart_router.post('/detail_cart')
 async def add_item_to_cart(user: user_dependency, id_product: int, addClick: bool):
     user_cart = get_user_cart(user)
     if user_cart is None:
